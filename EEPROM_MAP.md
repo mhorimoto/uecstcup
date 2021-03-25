@@ -22,6 +22,7 @@ EEPROM ASSIGNMENT MAP
 | 0x026 | Thermocouple-2 Interval | int     | seconds         |
 | 0x028 | Thermocouple-2 Name     | char[7] | 7characters     |
 | 0x02f | Delimiter               | byte    | NULL            |
+|   :   |         :               |   :     |                 |
 | 0x0N0 | Thermocouple-N Type     | char    | K,J,T,N,S,E,B,R |
 | 0x0N1 | Thermocouple-N Room     | byte    | 0-127           |
 | 0x0N2 | Thermocouple-N Region   | byte    | 0-127           |
@@ -30,6 +31,7 @@ EEPROM ASSIGNMENT MAP
 | 0x0N6 | Thermocouple-N Interval | int     | seconds         |
 | 0x0N8 | Thermocouple-N Name     | char[7] | 7characters     |
 | 0x0Nf | Delimiter               | byte    | NULL            |
+|   :   |         :               |   :     |                 |
 | 0x080 | Thermocouple-8 Type     | char    | K,J,T,N,S,E,B,R |
 | 0x081 | Thermocouple-8 Room     | byte    | 0-127           |
 | 0x082 | Thermocouple-8 Region   | byte    | 0-127           |

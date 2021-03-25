@@ -72,14 +72,14 @@ EEPROM ASSIGNMENT MAP
 | 0x08f | Delimiter               | byte    | NULL            |
 
 
-# UECSID
+## UECSID
 
 6バイト固定値で、
 
     0x10,0x10,0x0C,0x00,0x00,0x08
 
 
-# MAC Address
+## MAC Address
 
 当社のMACアドレスは、locally administeredで構成される。本機の場合には、
 
@@ -87,3 +87,28 @@ EEPROM ASSIGNMENT MAP
     0x02,0xa2,0x73,0x08,0xXX,0xXX
 
 
+## Thermocouple-N Type
+
+熱電対のタイプ
+ - K型
+ - J型
+ - T型
+ - N型
+ - S型
+ - E型
+ - B型
+ - R型
+これらをどれかをアルファベット1文字で指定する。
+
+
+## Thermocouple-N Room
+
+## Thermocouple-N Region
+
+## Thermocouple-N Order
+
+## Thermocouple-N Priority
+
+## Thermocouple-N Interval
+
+## Thermocouple-N Name

@@ -82,10 +82,47 @@ EEPROM ASSIGNMENT MAP
 
 ## Thermocouple-N Region
 
+系統番号
+
+制御系統または制御区分識別番号。
+0〜127の整数値を取る。0は、全系統向け。
+
 ## Thermocouple-N Order
+
+通し番号
+
+同一制御系統内での識別番号。  
+0〜30000の整数値を取る。0は、同一系統内の全機器向け。
 
 ## Thermocouple-N Priority
 
+優先順位
+
+同一の固有情報が複数発せられた場合の優先取得順位。
+0〜30の整数値を取る。
+
 ## Thermocouple-N Interval
 
+データ送信インターバル
+
+A-1S-0,A-10S-0,A-1M-0などの周期を秒数で指定する。
+
 ## Thermocouple-N Name
+
+CCM識別子項目名
+
+センサ個別の識別子項目名を記す。  
+本来のUECSの規格では19文字以下であるが、本装置は7文字以下とする。
+既定値は、
+
+     TCTemp
+
+である。7文字よりも短くなった部分はNULL(0)で埋める。
+上記の項目名TCTempの後ろにインタフェース副番とノード識別名が付記される。
+
+     TCTemp.1.mXX
+     TCTemp.2.mXX
+     TCTemp.:.mXX
+     TCTemp.7.mXX
+     TCTemp.8.mXX
+

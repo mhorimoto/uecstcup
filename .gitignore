@@ -1,1 +1,6 @@
+build
 *~
+*.avr.mega.elf
+*.avr.mega.hex
+*.avr.mega.with_bootloader.hex
+

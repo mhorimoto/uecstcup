@@ -20,7 +20,7 @@ void setup(void) {
 
   Serial.begin(115200);
   Serial.println("EEPROM SETTING");
-  //EEPROM.put(0x0,uecsid);
+  EEPROM.put(0x0,uecsid);
   Serial.println("WRITE DONE");
   Serial.print("UECSID:");
   for(i=0;i<6;i++) {
@@ -53,7 +53,7 @@ void setup(void) {
     if (i<5) Serial.print(":");
   }
   Serial.println(); 
-  //EEPROM.put(0x6,macadd);
+  EEPROM.put(0x6,macadd);
   Serial.print("MAC=");
   for(i=0;i<6;i++) {
     Serial.print(EEPROM.read(6+i),HEX);
@@ -61,12 +61,12 @@ void setup(void) {
   }
   Serial.println("");
   for(i=0;i<8;i++) {
-    //EEPROM.put((i*0x10)+0x10,data);
+    EEPROM.put((i*0x10)+0x10,data);
   }
   Serial.println("HEXDATA:");
   for(j=0;j<9;j++) {
     for(i=0;i<16;i++) {
-      Serial.print(EEPROM.read(i),HEX);
+      Serial.print(EEPROM.read(j*0x10+i),HEX);
       if (i<15) Serial.print(",");
     }
     Serial.println();

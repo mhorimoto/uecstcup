@@ -11,10 +11,10 @@
 #include <EEPROM.h>
 
 void setup(void) {
-  unsigned int i,j,r;
+  unsigned int i,j,r,a;
   byte t;
-  char c,name[8];
-  byte uecsid[6]={0x10,0x10,0x0c,0x00,0x00,0x08};
+  char c,name[8],z[4];
+  byte uecsid[6]={0x10,0x10,0x0c,0x00,0x00,0x08},uecsrd[6];
   byte macadd[6]={0x02,0xa2,0x73,0x08,0xff,0xff};
   byte data[16] ={'K',1,1,1,0,15,10,0,'T','C','T','e','m','p',0,0};
 

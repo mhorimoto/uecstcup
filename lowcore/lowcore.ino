@@ -20,6 +20,34 @@ void setup(void) {
 
   Serial.begin(115200);
   Serial.println("EEPROM SETTING");
+  EEPROM.get(0x0,uecsrd);
+  for(i=0;i<6;i++) {
+    if (uecsrd[i]!=uecsid[i]) {
+      r = 1;
+      break;
+    } else {
+      r = 0;
+    }
+  }
+  if (r==0) {
+    Serial.println("FINE DID");
+    Serial.println("HEXDATA:");
+    for(j=0;j<9;j++) {
+      sprintf(z,"0x%03X:",j*0x10);
+      Serial.print(z);
+      for(i=0;i<16;i++) {
+	sprintf(z,"%02X",EEPROM.read(i+(j*0x10)));
+	Serial.print(z);
+	if (i<15) Serial.print(",");
+      }
+      Serial.println();
+    }
+    Serial.end();
+    while(1) {
+      r = 1;
+      r = 2;
+    }
+  }
   EEPROM.put(0x0,uecsid);
   Serial.println("WRITE DONE");
   Serial.print("UECSID:");
@@ -62,11 +90,16 @@ void setup(void) {
   Serial.println("");
   for(i=0;i<8;i++) {
     EEPROM.put((i*0x10)+0x10,data);
+    a = (i*0x10)+0x10;
+    Serial.print("0x");
+    Serial.print(a,HEX);
+    EEPROM.put(a,data);
+    Serial.println(" WROTE");
   }
   Serial.println("HEXDATA:");
   for(j=0;j<9;j++) {
     for(i=0;i<16;i++) {
-      Serial.print(EEPROM.read(j*0x10+i),HEX);
+      Serial.print(EEPROM.read(i+(j*0x10)),HEX);
       if (i<15) Serial.print(",");
     }
     Serial.println();

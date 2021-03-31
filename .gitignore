@@ -1,6 +1,6 @@
 build
 *~
-*.avr.mega.elf
-*.avr.mega.hex
-*.avr.mega.with_bootloader.hex
+*.avr.uno.elf
+*.avr.uno.hex
+*.avr.uno.with_bootloader.hex
 

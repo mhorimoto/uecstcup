@@ -17,7 +17,7 @@ void setup(void) {
   byte uecsid[6]={0x10,0x10,0x0c,0x00,0x00,0x08},uecsrd[6];
   byte macadd[6]={0x02,0xa2,0x73,0x08,0xff,0xff};
   byte data[16] ={'K',1,1,1,0,15,10,0,'T','C','T','e','m','p',0,0};
-
+  byte cndd[16] ={'c',1,1,1,0,29,1, 0,'c','n','d',0  ,0  ,0  ,0,0};
   Serial.begin(115200);
   Serial.println("EEPROM SETTING");
   EEPROM.get(0x0,uecsrd);
@@ -27,6 +27,7 @@ void setup(void) {
       break;
     } else {
       r = 0;
+      r = 1;
     }
   }
   if (r==0) {
@@ -94,8 +95,11 @@ void setup(void) {
     Serial.print("0x");
     Serial.print(a,HEX);
     EEPROM.put(a,data);
-    Serial.println(" WROTE");
+    Serial.println("DATA WROTE");
   }
+  EEPROM.put(0x90,cndd);
+  Serial.println("CND WROTE");
+  
   Serial.println("HEXDATA:");
   for(j=0;j<9;j++) {
     for(i=0;i<16;i++) {
@@ -104,24 +108,27 @@ void setup(void) {
     }
     Serial.println();
   }
-  Serial.print("TYPE=");
-  Serial.write((char)EEPROM[0x10]);
-  Serial.println("");
-  Serial.print("ROOM=");
-  Serial.println((byte)EEPROM[0x11]);
-  Serial.print("REGION=");
-  Serial.println((byte)EEPROM[0x12]);
-  Serial.print("ORDER=");
-  EEPROM.get(0x13,r);
-  Serial.println(r,DEC);
-  Serial.print("PRIORITY=");
-  Serial.println((byte)EEPROM[0x15]);
-  Serial.print("INTERVAL=");
-  EEPROM.get(0x16,r);
-  Serial.println(r,DEC);
-  Serial.print("CCMTYPE=");
-  EEPROM.get(0x18,name);
-  Serial.println(name);
+  for(i=1;i<10;i++) {
+    Serial.print(i,HEX);
+    Serial.print(": ");
+    Serial.print("TYPE=");
+    Serial.write((char)EEPROM[i*0x10]);
+    Serial.print(" ROOM=");
+    Serial.print((byte)EEPROM[i*0x10+1]);
+    Serial.print(" REGION=");
+    Serial.print((byte)EEPROM[i*0x10+2]);
+    Serial.print(" ORDER=");
+    EEPROM.get(i*0x10+3,r);
+    Serial.print(r,DEC);
+    Serial.print(" PRIORITY=");
+    Serial.print((byte)EEPROM[i*0x10+5]);
+    Serial.print(" INTERVAL=");
+    EEPROM.get(i*0x10+6,r);
+    Serial.print(r,DEC);
+    Serial.print(" CCMTYPE=");
+    EEPROM.get(i*0x10+8,name);
+    Serial.println(name);
+  }
   Serial.end();
 }
 

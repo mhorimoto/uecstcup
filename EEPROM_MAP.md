@@ -40,6 +40,15 @@ EEPROM ASSIGNMENT MAP
 | 0x086 | Thermocouple-8 Interval | int     | seconds         |
 | 0x088 | Thermocouple-8 Name     | char[7] | 7characters     |
 | 0x08f | Delimiter               | byte    | NULL            |
+|   :   |         :               |   :     |                 |
+| 0x090 | cnd Type (dummy)        | char    | c               |
+| 0x091 | cnd Room                | byte    | 0-127           |
+| 0x092 | cnd Region              | byte    | 0-127           |
+| 0x093 | cnd Order               | int     | 0-30000         |
+| 0x095 | cnd Priority            | byte    | 29 (0-30)       |
+| 0x096 | cnd Interval            | int     | 1 seconds       |
+| 0x098 | cnd Name                | char[7] | cnd             |
+| 0x09f | Delimiter               | byte    | NULL            |
 
 
 ## UECSID

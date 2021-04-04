@@ -15,6 +15,14 @@ EEPROM初期化プログラム
 |    Thermocouple-N_Interval | 10                            |
 |    Thermocouple-N_Name     | 'TCTemp',NULL                 |
 |    Delimiter               | NULL                          |
+|    cnd Type (dummy)        | 'c'                           |
+|    cnd Room                | 1                             |
+|    cnd Region              | 1                             |
+|    cnd Order               | 1                             |
+|    cnd Priority            | 29                            |
+|    cnd Interval            | 1                             |
+|    cnd Name                | 'cnd',NULL*4                  |
+|    Delimiter               | NULL                          |
 
 
 N:1〜8まで繰り返す。

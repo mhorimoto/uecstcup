@@ -22,7 +22,7 @@ void get_mcusr(void) {
 }
 
 
-const char *VERSION = "D0007 ";
+const char *VERSION = "D0008 ";
 const signed long ccmver = 0x69010 + 6;
 
 char uecsid[6], uecstext[256],strIP[16];
@@ -37,7 +37,7 @@ int mcp96_addr[]={0x60,0x61,0x62,0x63,0x64,0x65,0x66,0x67};
 float thermocouple[8];
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
-char lcdtext[16][17];
+char lcdtext[13][17];
 
 byte macaddr[6];
 IPAddress localIP,broadcastIP,subnetmaskIP,remoteIP;
@@ -56,11 +56,11 @@ volatile int period60sec = 0;
 #define NTPSERVER_NAME_LENGTH 32
 #define NTPSERVER_NAME  0xfe0
 #define NTPLOCAL_PORT   8123
-const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
-byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
-char ntpServer[NTPSERVER_NAME_LENGTH];
+//const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
+//byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
+//char ntpServer[NTPSERVER_NAME_LENGTH];
 //char dod[11],tod[9];      // Date of Date,Time of Date
-int  ntprc;
+//int  ntprc;
 
 
 void setup(void) {
@@ -75,7 +75,7 @@ void setup(void) {
 	  uecsid[0],uecsid[1],uecsid[2],uecsid[3],uecsid[4],uecsid[5]);
   Ethernet.init(10);
   if (Ethernet.begin(macaddr)==0) {
-    sprintf(lcdtext[2],"Net fail");
+    sprintf(lcdtext[2],"NFL");
   } else {
     localIP = Ethernet.localIP();
     subnetmaskIP = Ethernet.subnetMask();
@@ -108,13 +108,33 @@ void setup(void) {
 }
 
 void loop() {
-  int i,ta,tb;
+  int i,ia,ta,tb;
+  byte room,region,priority;
+  int  order,interval;
+  char name[7];
+
   // 10 sec interval
   if (period10sec==1) {
     period10sec = 0;
+    for(i=1;i<9;i++) {
+      ia = i*0x10;
+      EEPROM.get(ia+0x01,room);
+      EEPROM.get(ia+0x02,region);
+      EEPROM.get(ia+0x03,order);
+      EEPROM.get(ia+0x05,priority);
+      EEPROM.get(ia+0x06,interval);
+      EEPROM.get(ia+0x08,name);
+      ta = (int)thermocouple[(i-1)];
+      tb = (int)((thermocouple[(i-1)]-ta)*100);
+      sprintf(uecstext,"<?xml version=\"1.0\"?><UECS ver=\"1.00-E10\"><DATA type=\"%s.%d.mIC\" room=\"%d\" region=\"%d\" order=\"%d\" priority=\"%d\">%d.%02d</DATA><IP>%s</IP></UECS>",name,i,room,region,order,priority,ta,tb,strIP);
+      Udp16520.beginPacket(broadcastIP,16520);
+    //    Udp16520.write(lcdtext[dispID+1]);
+      Udp16520.write(uecstext);
+      Udp16520.endPacket();
     //    Serial.begin(115200);
     //    Serial.println("10sec");
     //    Serial.end();
+    }
   }
   // 1 min interval
   if (period60sec==1) {

@@ -2,16 +2,16 @@ void init_mcp(void) {
   int i;
   extern Adafruit_MCP9600 mcp[8];
   lcd.clear();
-  lcd.print("MCP9600 HW INIT");
+  lcd.print(F("MCP9600 HW INIT"));
   delay(1000);
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("1 2 3 4 5 6 7 8");
+  lcd.print(F("1 2 3 4 5 6 7 8"));
   /* Initialise the driver with I2C_ADDRESS and the default I2C bus. */
   for(i=0;i<8;i++) {
     lcd.setCursor((i*2),1);
     if (! mcp[i].begin(0x60+i)) {
-      lcd.print("X");
+      lcd.print(F("X"));
       //      Serial.println(" Sensor not found. Check wiring!");
     } else {
       mcp[i].setADCresolution(MCP9600_ADCRESOLUTION_18);
@@ -51,14 +51,14 @@ void init_mcp(void) {
 	break;
       }
       switch (mcp[i].getThermocoupleType()) {
-      case MCP9600_TYPE_K:  lcd.print("K"); break;
-      case MCP9600_TYPE_J:  lcd.print("J"); break;
-      case MCP9600_TYPE_T:  lcd.print("T"); break;
-      case MCP9600_TYPE_N:  lcd.print("N"); break;
-      case MCP9600_TYPE_S:  lcd.print("S"); break;
-      case MCP9600_TYPE_E:  lcd.print("E"); break;
-      case MCP9600_TYPE_B:  lcd.print("B"); break;
-      case MCP9600_TYPE_R:  lcd.print("R"); break;
+      case MCP9600_TYPE_K:  lcd.print(F("K")); break;
+      case MCP9600_TYPE_J:  lcd.print(F("J")); break;
+      case MCP9600_TYPE_T:  lcd.print(F("T")); break;
+      case MCP9600_TYPE_N:  lcd.print(F("N")); break;
+      case MCP9600_TYPE_S:  lcd.print(F("S")); break;
+      case MCP9600_TYPE_E:  lcd.print(F("E")); break;
+      case MCP9600_TYPE_B:  lcd.print(F("B")); break;
+      case MCP9600_TYPE_R:  lcd.print(F("R")); break;
       }
       mcp[i].setFilterCoefficient(3);
       //      Serial.print("Filter coefficient value set to: ");

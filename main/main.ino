@@ -26,8 +26,8 @@ const char *VERSION = "D0008 ";
 const signed long ccmver = 0x69010 + 6;
 
 char uecsid[6], uecstext[256],strIP[16];
-byte cnd_room,cnd_region,cnd_priority,ccm_room[8],ccm_region[8],ccm_priority[8];
-int  cnd_order,ccm_order[8];
+//byte cnd_room,cnd_region,cnd_priority,ccm_room[8],ccm_region[8],ccm_priority[8];
+//int  cnd_order,ccm_order[8];
 
 /////////////////////////////////////
 // Hardware Define

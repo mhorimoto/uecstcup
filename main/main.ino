@@ -22,8 +22,8 @@ void get_mcusr(void) {
 }
 
 
-const char *VERSION = "D0008 ";
-const signed long ccmver = 0x69010 + 6;
+const char VERSION[16] PROGMEM = "THCP Ver:D00013";
+//const signed long ccmver = 0x69010 + 6;
 
 char uecsid[6], uecstext[256],strIP[16];
 //byte cnd_room,cnd_region,cnd_priority,ccm_room[8],ccm_region[8],ccm_priority[8];
@@ -41,8 +41,7 @@ char lcdtext[13][17];
 
 byte macaddr[6];
 IPAddress localIP,broadcastIP,subnetmaskIP,remoteIP;
-EthernetUDP Udp16520,Udp16529;
-EthernetUDP ntp;
+EthernetUDP Udp16520; //,Udp16529;
 
 volatile int dispID = 0;
 volatile int dispEnable = 0;
@@ -50,28 +49,23 @@ volatile int period1sec = 0;
 volatile int period10sec = 0;
 volatile int period60sec = 0;
 
-/////////
-// NTP
-/////////
-#define NTPSERVER_NAME_LENGTH 32
-#define NTPSERVER_NAME  0xfe0
-#define NTPLOCAL_PORT   8123
-//const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
-//byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
-//char ntpServer[NTPSERVER_NAME_LENGTH];
-//char dod[11],tod[9];      // Date of Date,Time of Date
-//int  ntprc;
 
 
 void setup(void) {
   int i;
+  const char ids[] PROGMEM = "%s:%02X%02X%02X%02X%02X%02X";
   extern void init_mcp(void);
   lcd.init();
   lcd.backlight();
   EEPROM.get(0x00,uecsid);
   EEPROM.get(0x06,macaddr);
-  sprintf(lcdtext[0],"THCP Ver:%6s",VERSION);
-  sprintf(lcdtext[1],"ID:%02X%02X%02X%02X%02X%02X",
+  for(i=0;i<16;i++) {
+    lcdtext[0][i] = pgm_read_byte(&(VERSION[i]));
+  }
+  lcdtext[0][i] = 0;
+  //  sprintf(lcdtext[1],"ID:%02X%02X%02X%02X%02X%02X",
+  //	  uecsid[0],uecsid[1],uecsid[2],uecsid[3],uecsid[4],uecsid[5]);
+  sprintf(lcdtext[1],ids,"ID",
 	  uecsid[0],uecsid[1],uecsid[2],uecsid[3],uecsid[4],uecsid[5]);
   Ethernet.init(10);
   if (Ethernet.begin(macaddr)==0) {
@@ -82,13 +76,15 @@ void setup(void) {
     for(i=0;i<4;i++) {
       broadcastIP[i] = ~subnetmaskIP[i]|localIP[i];
     }
-    sprintf(lcdtext[2],"HW:%02X%02X%02X%02X%02X%02X",
+    //sprintf(lcdtext[2],"HW:%02X%02X%02X%02X%02X%02X",
+    //	    macaddr[0],macaddr[1],macaddr[2],macaddr[3],macaddr[4],macaddr[5]);
+    sprintf(lcdtext[2],ids,"HW",
 	    macaddr[0],macaddr[1],macaddr[2],macaddr[3],macaddr[4],macaddr[5]);
     sprintf(strIP,"%d.%d.%d.%d",localIP[0],localIP[1],localIP[2],localIP[3]);
     sprintf(lcdtext[3],"%s",strIP);
     sprintf(lcdtext[4],"%d.%d.%d.%d",broadcastIP[0],broadcastIP[1],broadcastIP[2],broadcastIP[3]);
     Udp16520.begin(16520);
-    Udp16529.begin(16529);
+    //    Udp16529.begin(16529);
   }
   lcd.setCursor(0,0);
   lcd.print(lcdtext[0]);
@@ -111,8 +107,10 @@ void loop() {
   int i,ia,ta,tb;
   byte room,region,priority;
   int  order,interval;
-  char name[7];
+  char name[7],dname[10],val[6];
 
+  //  const char *xmlhead PROGMEM = "<?xml version=\"1.0\"?><UECS ver=\"1.00-E10\"><DATA type=\"";
+  const char *xmlDT PROGMEM = "<?xml version=\"1.0\"?><UECS ver=\"1.00-E10\"><DATA type=\"%s.mIC\" room=\"%d\" region=\"%d\" order=\"%d\" priority=\"%d\">%s</DATA><IP>%s</IP></UECS>";
   // 10 sec interval
   if (period10sec==1) {
     period10sec = 0;
@@ -126,22 +124,19 @@ void loop() {
       EEPROM.get(ia+0x08,name);
       ta = (int)thermocouple[(i-1)];
       tb = (int)((thermocouple[(i-1)]-ta)*100);
-      sprintf(uecstext,"<?xml version=\"1.0\"?><UECS ver=\"1.00-E10\"><DATA type=\"%s.%d.mIC\" room=\"%d\" region=\"%d\" order=\"%d\" priority=\"%d\">%d.%02d</DATA><IP>%s</IP></UECS>",name,i,room,region,order,priority,ta,tb,strIP);
+      sprintf(dname,"%s.%d",name,i);
+      sprintf(val,"%d.%02d",ta,tb);
+      //      sprintf(uecstext,"<?xml version=\"1.0\"?><UECS ver=\"1.00-E10\"><DATA type=\"%s.%d.mIC\" room=\"%d\" region=\"%d\" order=\"%d\" priority=\"%d\">%d.%02d</DATA><IP>%s</IP></UECS>",name,i,room,region,order,priority,ta,tb,strIP);
+      //      sprintf(uecstext,"%s%s.%d.mIC\" room=\"%d\" region=\"%d\" order=\"%d\" priority=\"%d\">%d.%02d</DATA><IP>%s</IP></UECS>",xmlhead,name,i,room,region,order,priority,ta,tb,strIP);
+      sprintf(uecstext,xmlDT,dname,room,region,order,priority,val,strIP);
       Udp16520.beginPacket(broadcastIP,16520);
-    //    Udp16520.write(lcdtext[dispID+1]);
       Udp16520.write(uecstext);
       Udp16520.endPacket();
-    //    Serial.begin(115200);
-    //    Serial.println("10sec");
-    //    Serial.end();
     }
   }
   // 1 min interval
   if (period60sec==1) {
     period60sec = 0;
-    //    Serial.begin(115200);
-    //    Serial.println("60sec");
-    //    Serial.end();
   }
   // 1 sec interval
   if (dispEnable==1) {
@@ -155,8 +150,9 @@ void loop() {
     lcd.setCursor(0,1);
     lcd.print(lcdtext[dispID+1]);
     sprintf(uecstext,"<?xml version=\"1.0\"?><UECS ver=\"1.00-E10\"><DATA type=\"cnd.mIC\" room=\"%d\" region=\"%d\" order=\"%d\" priority=\"29\">0</DATA><IP>%s</IP></UECS>",1,1,1,strIP);
+    //    sprintf(uecstext,"%scnd.mIC\" room=\"%d\" region=\"%d\" order=\"%d\" priority=\"29\">0</DATA><IP>%s</IP></UECS>",xmlhead,1,1,1,strIP);
+    sprintf(uecstext,xmlDT,"cnd",room,region,order,priority,0,strIP);
     Udp16520.beginPacket(broadcastIP,16520);
-    //    Udp16520.write(lcdtext[dispID+1]);
     Udp16520.write(uecstext);
     Udp16520.endPacket();
   } else {

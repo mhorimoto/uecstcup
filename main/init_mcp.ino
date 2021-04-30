@@ -12,18 +12,8 @@ void init_mcp(void) {
     lcd.setCursor((i*2),1);
     if (! mcp[i].begin(0x60+i)) {
       lcd.print(F("X"));
-      //      Serial.println(" Sensor not found. Check wiring!");
     } else {
       mcp[i].setADCresolution(MCP9600_ADCRESOLUTION_18);
-      //      Serial.println("Found MCP9600!");
-      //      Serial.print("ADC resolution set to ");
-      //      switch (mcp[i].getADCresolution()) {
-      //      case MCP9600_ADCRESOLUTION_18:   Serial.print("18"); break;
-      //      case MCP9600_ADCRESOLUTION_16:   Serial.print("16"); break;
-      //      case MCP9600_ADCRESOLUTION_14:   Serial.print("14"); break;
-      //      case MCP9600_ADCRESOLUTION_12:   Serial.print("12"); break;
-      //      }
-      //      Serial.println(" bits");
       switch(EEPROM.read((i+1)*0x10)) {
       case 'K':
 	mcp[i].setThermocoupleType(MCP9600_TYPE_K);

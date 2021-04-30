@@ -49,8 +49,6 @@ volatile int period1sec = 0;
 volatile int period10sec = 0;
 volatile int period60sec = 0;
 
-
-
 void setup(void) {
   int i;
   const char ids[] PROGMEM = "%s:%02X%02X%02X%02X%02X%02X";

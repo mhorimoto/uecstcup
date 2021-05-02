@@ -2,7 +2,7 @@ void init_mcp(void) {
   int i;
   extern Adafruit_MCP9600 mcp[8];
   lcd.clear();
-  lcd.print(F("MCP9600 HW INIT"));
+  lcd.print(F("MCP9600 INIT"));
   delay(1000);
   lcd.clear();
   lcd.setCursor(0,0);
@@ -51,9 +51,6 @@ void init_mcp(void) {
       case MCP9600_TYPE_R:  lcd.print(F("R")); break;
       }
       mcp[i].setFilterCoefficient(3);
-      //      Serial.print("Filter coefficient value set to: ");
-      //      Serial.println(mcp[i].getFilterCoefficient());
     }
   }
-  //  Serial.end();
 }

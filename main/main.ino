@@ -1,3 +1,12 @@
+///////////////////////////////////////////////////////////////////
+// THCP
+//  MIT License
+//  Copyright (c) 2021 Masafumi Horimoto
+//  Release on 05-May-2021
+//  https://github.com/mhorimoto/uecstcup/
+///////////////////////////////////////////////////////////////////
+
+
 #include <stdio.h>
 #include <SPI.h>
 #include <Ethernet2.h>
@@ -22,7 +31,7 @@ void get_mcusr(void) {
 }
 
 
-const char VERSION[16] PROGMEM = "THCP Ver:A00P0";
+const char VERSION[16] PROGMEM = "THCP Ver:A00";
 
 char uecsid[6], uecstext[180],strIP[16],linebuf[65];
 byte lineptr = 0;
@@ -111,7 +120,6 @@ void setup(void) {
 void(*resetFunc)(void) = 0;
 
 /////////////////////////////////
-//
 void loop() {
   int i,ia,ta,tb;
   byte room,region,priority;
@@ -263,4 +271,3 @@ void configure_wdt(void) {
                                    //  4 seconds: 0b100000
                                    //  8 seconds: 0b100001
 }
-
